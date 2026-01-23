@@ -52,12 +52,13 @@ class VistaJuego:
             pygame.draw.rect(self.pantalla, (50, 50, 50), (200, 100, 400, 400))
 
         for nodo in lista_nodos:
-            for vecino in nodo.vecinos:
+            for vecino in nodo.nodos_vecinos: 
                 pygame.draw.line(self.pantalla, (150, 150, 150), (nodo.x, nodo.y), (vecino.x, vecino.y), 3)
 
         for nodo in lista_nodos:
             self.dibujar_nodo_transparente(nodo.x, nodo.y, nodo.radio)
             pygame.draw.circle(self.pantalla, (255, 255, 255), (nodo.x, nodo.y), nodo.radio, 1)
+
 
     def dibujar_mira(self, mouse_x, mouse_y):
         dx = random.randint(-self.temblor, self.temblor) if self.temblor > 0 else 0
