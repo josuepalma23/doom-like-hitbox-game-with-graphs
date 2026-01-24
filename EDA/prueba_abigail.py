@@ -1,42 +1,55 @@
 import pygame
 import sys
 from vista import VistaJuego
-
-class NodoFalso:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-        self.radio = 40
-        self.vecinos = []
+from modelo import Grafo_Cuerpo  
 
 pygame.init()
 PANTALLA = pygame.display.set_mode((800, 600))
-pygame.display.set_caption("Prueba de Abigail")
+pygame.display.set_caption("Proyecto Final - Integración")
 reloj = pygame.time.Clock()
 
-n1 = NodoFalso(400, 100) 
-n2 = NodoFalso(400, 300) 
-n1.vecinos.append(n2)    
-n2.vecinos.append(n1)
-mis_nodos = [n1, n2]
+logica_juego = Grafo_Cuerpo()
+
+logica_juego.inicializar_personaje() 
+
+lista_nodos_reales = list(logica_juego.nodos.values())
 
 vista = VistaJuego(PANTALLA)
 
 while True:
+    mouse_pos = pygame.mouse.get_pos()
+    
     for evento in pygame.event.get():
         if evento.type == pygame.QUIT:
+            pygame.quit()
             sys.exit()
+            
         if evento.type == pygame.MOUSEBUTTONDOWN:
-            vista.temblor += 5 
-            print("¡Bang! Aumentando temblor...")
+            vista.temblor += 2
+            if vista.temblor > 20: vista.temblor = 20
 
-    PANTALLA.fill((20, 20, 20)) 
-    
-    pygame.mouse.set_visible(False)
-    mx, my = pygame.mouse.get_pos()
-    
-    vista.dibujar_grafo(mis_nodos)
-    vista.dibujar_mira(mx, my)
+            nodo_tocado = vista.detectar_impacto(mouse_pos[0], mouse_pos[1], lista_nodos_reales)
+            
+            if nodo_tocado:
+                print(f"\n--- IMPACTO ---")
+                print(f"¡Le diste a: {nodo_tocado.nombre}!")
+                
+                nodo_tocado.medir_golpes(20) 
+                
+                nodo_vecino = logica_juego.calcular_rebote(nodo_tocado)
+                
+                
+                if nodo_vecino:
+                    print(f"¡REBOTE! El daño saltó a: {nodo_vecino.nombre}")
+                    nodo_vecino.medir_golpes(10) 
+            else:
+                print("Disparo al aire...")
 
-    pygame.display.flip()
+    PANTALLA.fill((0, 0, 0))
+
+    vista.dibujar_grafo(lista_nodos_reales)
+    
+    vista.dibujar_mira(mouse_pos[0], mouse_pos[1])
+
+    pygame.display.update()
     reloj.tick(60)
