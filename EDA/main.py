@@ -21,6 +21,9 @@ juego.inicializar_personaje()
 ## Vista
 vista = Vista_Hitbox_Doom(PANTALLA)
 
+estado = "MENU"
+ubi_boton = pygame.Rect(300, 400, 200, 80)
+
 ##Bucle del juego
 while True:
 
@@ -31,19 +34,32 @@ while True:
             pygame.quit()
             sys.exit()
         
-        ## click izq
         if evento.type == pygame.MOUSEBUTTONDOWN:
-            ## lo de JOEL, pero todavia no tenemo, solo voy a probar el disparo y ads
-            vista.temblor += 2
-            print("Disparo!, Aumenta el ADS")
-        
-    
-    lista_nodos_finales = list(juego.nodos.values())
-    vista.dibujar_grafo(lista_nodos_finales)
-    pygame.mouse.set_visible(False)
+            mouse_pos = pygame.mouse.get_pos()
 
-    mx, my = pygame.mouse.get_pos()
-    vista.dibujar_mira(mx, my)
+            if estado == "MENU":
+                if ubi_boton.collidepoint(mouse_pos):
+                    print("Inicio")
+                    estado = "JUEGO"
+
+            elif estado == "JUEGO":
+                ## lo de JOEL, pero todavia no tenemo, solo voy a probar el disparo y ads
+                vista.temblor += 2
+                print("Disparo!, Aumenta el ADS")
+    
+    if estado == "MENU":
+        vista.dibujar_menu()
+    
+    elif estado == "JUEGO":
+        lista_nodos_finales = list(juego.nodos.values())
+        vista.dibujar_grafo(lista_nodos_finales)
+        pygame.mouse.set_visible(False)
+
+        mx, my = pygame.mouse.get_pos()
+        vista.dibujar_mira(mx, my)
+    
+    if estado == "MENU":
+        pygame.mouse.set_visible(True)
 
     pygame.display.flip()
     reloj.tick(60) ## FPS

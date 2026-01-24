@@ -11,18 +11,32 @@ class Vista_Hitbox_Doom:
         self.color_nodo = (200, 50, 50) ## color tipo sangre para los nodos
 
         carpeta_actual = os.path.dirname(os.path.abspath(__file__))
-        ruta_imagen = os.path.join(carpeta_actual, "disenio_eda.jpg")
+        ruta_fondo = os.path.join(carpeta_actual, "disenio_eda.jpg")
+        ruta_menu = os.path.join(carpeta_actual, "pantalla_inicio.jpg")
 
-        print(f"buscando img en {ruta_imagen}")
+        print(f"buscando img en {ruta_fondo}")
 
         ##cargar el disenio
         try:
-            self.disenio_entorno = pygame.image.load(ruta_imagen)
+            self.disenio_entorno = pygame.image.load(ruta_fondo)
             self.disenio_entorno = pygame.transform.scale(self.disenio_entorno, (800, 600))
     
         except:
             print("No se encontro la imagen de fondo")
             self.disenio_entorno = None
+
+        try:
+            self.disenio_menu = pygame.image.load(ruta_menu)
+            self.disenio_menu = pygame.transform.scale(self.disenio_menu, (800, 600))
+        except:
+            print("No se encontro la imagen del menu")
+            self.disenio_menu = None
+
+    def dibujar_menu(self):
+        if self.disenio_menu:
+            self.pantalla.blit(self.disenio_menu, (0,0))
+        else:
+            self.pantalla.fill((20,20,20))
 
     '''
     Dibujamos al juego por capas:
