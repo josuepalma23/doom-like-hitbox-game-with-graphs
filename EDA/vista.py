@@ -38,8 +38,8 @@ class Vista_Hitbox_Doom:
             print("No se encontro la imagen del menu")
             self.disenio_menu = None
 
-    # --- PANTALLA DE GAME OVER ---
-    def dibujar_game_over(self, puntaje):
+    ## dibuja la pantalla de game over con texto dinamico
+    def dibujar_game_over(self, puntaje, texto_boton="SIGUIENTE JUGADOR"):
         # Un cuadro negro semitransparente para tapar el fondo
         oscuro = pygame.Surface((800, 600))
         oscuro.set_alpha(200) 
@@ -54,10 +54,14 @@ class Vista_Hitbox_Doom:
         self.pantalla.blit(titulo, (230, 150))
         self.pantalla.blit(puntos, (280, 250))
 
-        # Boton siguiente jugador
+        # Boton siguiente jugador (Verde)
         pygame.draw.rect(self.pantalla, (0, 150, 0), self.boton_reset) # Rectangulo verde
         pygame.draw.rect(self.pantalla, (255, 255, 255), self.boton_reset, 2) # Borde blanco
-        texto_reset = self.fuente_chica.render("SIGUIENTE JUGADOR", True, (255, 255, 255))
+        
+        # Renderizamos el texto variable (SIGUIENTE o FINALIZAR)
+        texto_reset = self.fuente_chica.render(texto_boton, True, (255, 255, 255))
+        
+        # Centrado simple
         self.pantalla.blit(texto_reset, (290, 410))
 
         # Boton Menu (Azul)
@@ -80,11 +84,11 @@ class Vista_Hitbox_Doom:
 
     def dibujar_grafo(self, lista_nodos):
 
-        ## capa 1: el disenio o el fondo
+        ## capa 1: el diseño o el fondo
         if self.disenio_entorno:
-            self.pantalla.blit(self.disenio_entorno, (0,0)) ## dibujar el disenio en la pantalla
+            self.pantalla.blit(self.disenio_entorno, (0,0)) ## dibujar el diseño en la pantalla
         else:
-            self.pantalla.fill((20,20,20)) ##pintar todo gris si no hay disenio
+            self.pantalla.fill((20,20,20)) ##pintar todo gris si no hay diseño
 
         ## capa 2: las aristas
         for nodo in lista_nodos:
