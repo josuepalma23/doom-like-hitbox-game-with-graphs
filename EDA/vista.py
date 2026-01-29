@@ -38,9 +38,9 @@ class Vista_Hitbox_Doom:
             print("No se encontro la imagen del menu")
             self.disenio_menu = None
 
-    ## dibuja la pantalla de game over con texto dinamico
+    ## dibuja la pantalla de game over 
     def dibujar_game_over(self, puntaje, texto_boton="SIGUIENTE JUGADOR"):
-        # Un cuadro negro semitransparente para tapar el fondo
+        # Un cuadro negro para tapar el fondo
         oscuro = pygame.Surface((800, 600))
         oscuro.set_alpha(200) 
         oscuro.fill((0,0,0))
