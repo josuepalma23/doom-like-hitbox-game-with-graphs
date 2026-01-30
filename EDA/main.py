@@ -15,7 +15,7 @@ ALTO = 600
 pygame.init()
 pygame.mixer.init()
 PANTALLA = pygame.display.set_mode((ANCHO, ALTO))
-pygame.display.set_caption("Grafos con Doom - Final Clean")
+pygame.display.set_caption("Grafos con Doom")
 
 reloj = pygame.time.Clock()
 
@@ -39,7 +39,7 @@ juego.inicializar_personaje()
 vista = Vista_Hitbox_Doom(PANTALLA)
 
 estado = "MENU"
-balas = 10
+balas = 6
 puntaje = 0
 ubi_boton = pygame.Rect(300, 400, 200, 80)
 
@@ -79,15 +79,15 @@ while True:
         if evento.type == pygame.KEYDOWN and estado == "ESTRATEGIA":
             if evento.key == pygame.K_a:
                 tipo_municion = "PESADA"
-                descripcion_bonus = "EFECTO: Daño Crítico (+50% Pts) | RETROCESO ALTO"
+                descripcion_bonus = "RETROCESO ALTO + 50% Pts"
                 multiplicador_puntos = 1.5      
                 incremento_temblor = 25         
                 estado = "JUEGO"
             elif evento.key == pygame.K_s:
                 tipo_municion = "LIGERA"
-                descripcion_bonus = "EFECTO: Daño Estándar | RETROCESO BAJO"
+                descripcion_bonus = "RETROCESO BAJO + Daño Estándar"
                 multiplicador_puntos = 1.0      
-                incremento_temblor = 5          
+                incremento_temblor = 15          
                 estado = "JUEGO"
         
 
@@ -105,7 +105,7 @@ while True:
                     "Jugador 2": {"Total Damage": 0, "Nodos Destruidos": [], "Puntaje": 0}
                 }
                 
-                balas = 3 
+                balas = 6 
                 puntaje = 0
                 vista.temblor = 0
                 juego = Grafo_Cuerpo()
@@ -171,7 +171,7 @@ while True:
                     if jugador_turno == 1:
                         # si es el J1, pasamos al J2
                         jugador_turno = 2
-                        balas = 3
+                        balas = 6
                         puntaje = 0
                         vista.temblor = 0
                         juego = Grafo_Cuerpo()
@@ -182,10 +182,22 @@ while True:
                         # si es J2, fin del juego, regresa a menu
                         print("Fin del juego, regresando al menú...")
                         guardar_datos_json(datos_sesion)
+                        # Resetear variables para nueva partida
+                        jugador_turno = 1
+                        balas = 6
+                        puntaje = 0
+                        vista.temblor = 0
+                        puntajes_finales = [0, 0]
                         estado = "MENU"
                     
 
                 elif vista.boton_menu.collidepoint(mouse_pos):
+                    # Resetear variables para nueva partida
+                    jugador_turno = 1
+                    balas = 6
+                    puntaje = 0
+                    vista.temblor = 0
+                    puntajes_finales = [0, 0]
                     estado = "MENU"
 
     # DIBUJAR EN PANTALLA
@@ -200,11 +212,11 @@ while True:
         PANTALLA.fill((20, 20, 40)) 
         fuente = pygame.font.SysFont("Arial", 30, bold=True)
         titulo = fuente.render(f"JUGADOR {jugador_turno}: ELIGE TU MUNICIÓN", True, (255, 255, 0))
-        txt_a = fuente.render("[A] PESADA:  +50% Puntos | Mucho Retroceso", True, (255, 100, 100))
-        txt_s = fuente.render("[S] LIGERA:  Puntos Normales | Puntería Estable", True, (100, 255, 100))
+        txt_a = fuente.render("[A] PESADA, Mucho Retroceso", True, (255, 100, 100))
+        txt_s = fuente.render("[S] LIGERA, Puntería Estable", True, (100, 255, 100))
         PANTALLA.blit(titulo, (150, 150))
-        PANTALLA.blit(txt_a, (100, 250))
-        PANTALLA.blit(txt_s, (100, 320))
+        PANTALLA.blit(txt_a, (150, 250))
+        PANTALLA.blit(txt_s, (150, 320))
 
     elif estado == "JUEGO":
         lista_nodos_finales = list(juego.nodos.values())
@@ -238,4 +250,4 @@ while True:
         pygame.mouse.set_visible(True)
 
     pygame.display.flip()
-    reloj.tick(60)
+    reloj.tick(120)  ## cantidad de FPS

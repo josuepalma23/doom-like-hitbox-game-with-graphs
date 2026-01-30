@@ -51,7 +51,7 @@ class Vista_Hitbox_Doom:
         puntos = self.fuente_chica.render(f"Puntaje Final: {puntaje}", True, (255, 255, 255))
 
         # Posicion de los textos 
-        self.pantalla.blit(titulo, (230, 150))
+        self.pantalla.blit(titulo, (200, 150))
         self.pantalla.blit(puntos, (280, 250))
 
         # Boton siguiente jugador (Verde)
