@@ -31,6 +31,17 @@ try:
 except:
     print("No se encontro la musica de fondo")
 
+## Cargar sonido de disparo
+ruta_shot = os.path.join(carpeta_actual, "sonido_disparo.wav")
+sonido_disparo = None
+
+try:
+    sonido_disparo = pygame.mixer.Sound(ruta_shot)
+    sonido_disparo.set_volume(0.4)
+    print("sonido cargado")
+except Exception as e:
+    print(f"No se pudo encontrar el sonido de disparo {e}")
+
 ## Backend
 juego = Grafo_Cuerpo()
 juego.inicializar_personaje()
@@ -117,6 +128,11 @@ while True:
             # Disparar en el juego
             elif estado == "JUEGO":
                 if balas > 0:
+
+                    ##suena cada q uno dispara
+                    if sonido_disparo:
+                        sonido_disparo.play()
+
                     balas = balas - 1
                     # aumento de dificultad y temblor
                     vista.temblor += incremento_temblor 
@@ -179,16 +195,11 @@ while True:
                         estado = "ESTRATEGIA" 
                     
                     else:
-                        # si es J2, fin del juego, regresa a menu
-                        print("Fin del juego, regresando al menú...")
+                        print("Fin de sesión de Juego")
                         guardar_datos_json(datos_sesion)
-                        # Resetear variables para nueva partida
-                        jugador_turno = 1
-                        balas = 6
-                        puntaje = 0
-                        vista.temblor = 0
-                        puntajes_finales = [0, 0]
-                        estado = "MENU"
+
+                        pygame.quit()
+                        sys.exit()
                     
 
                 elif vista.boton_menu.collidepoint(mouse_pos):

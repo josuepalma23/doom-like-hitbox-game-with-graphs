@@ -90,21 +90,29 @@ class Grafo_Cuerpo:
         print("Inicializamos el grafico, se conectan los nodos.")
 
     def calcular_rebote(self, nodo_golpeado):
-        print(f"calculamos el daño desde {nodo_golpeado.nombre}")
+        print(f"Calculando rebote desde {nodo_golpeado.nombre}")
 
-        ## el rebote solo vale para nodos vivos y adyacentes
-        vecinos_activos = []
+        ## Hacemos un recorrido por amplitud utilizando una cola
+        cola = [nodo_golpeado]
 
-        for vecino in nodo_golpeado.vecinos:
-            if vecino.destruido == False:
-                vecinos_activos.append(vecino)
+        ## Creamos un diccionario para almacenar los nodos visitados
+        visitados = {nodo_golpeado}
+
+        while len(cola) > 0:
+            ## amplitud: sacamos el primer nodo
+            nodo_actual = cola.pop(0)
+
+            ## revisamos a sus "hijos" ya que ahora es una raiz
+            for vecino in nodo_actual.vecinos:
+                if vecino not in visitados:
+                    if not vecino.destruido:
+                        print(f"El disparo rebota en: {vecino.nombre}")
+                        return vecino
+                    
+                    ## si está muerto ese nodo, el daño sigue buscando un nodo
+                    visitados.add(vecino)
+                    cola.append(vecino)
         
-        ## si no hay vecinos vivos, se falla el tiro
-        if not vecinos_activos:
-            print("Fallaste el tiro, no hay mas nodos disponibles")
-            return None
+        print("La bala se perdió, ya no hay más nodos con vida")
+        return None
         
-        ## rebote aleatorio
-        vecino_aleatorio = random.choice(vecinos_activos)
-        print(f"La bala reboto hacia {vecino_aleatorio.nombre}")
-        return vecino_aleatorio
