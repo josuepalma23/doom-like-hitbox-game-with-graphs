@@ -15,7 +15,7 @@ ALTO = 600
 pygame.init()
 pygame.mixer.init()
 PANTALLA = pygame.display.set_mode((ANCHO, ALTO))
-pygame.display.set_caption("Grafos con Doom")
+pygame.display.set_caption("Grafos con Doom y FULL DISPAROS y FULL METAL")
 
 reloj = pygame.time.Clock()
 
